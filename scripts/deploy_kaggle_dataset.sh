@@ -25,8 +25,7 @@ mkdir -p "$BUILD_DIR"
 cp "$ROOT_DIR/README.md" "$BUILD_DIR/"
 cp "$ROOT_DIR/pyproject.toml" "$BUILD_DIR/"
 cp "$ROOT_DIR/uv.lock" "$BUILD_DIR/"
-cp "$ROOT_DIR/main.py" "$BUILD_DIR/"
-cp -R "$ROOT_DIR/src" "$BUILD_DIR/"
+find "$ROOT_DIR/src" -maxdepth 1 -type f \( -name "*.py" -o -name "*.sh" \) -exec cp {} "$BUILD_DIR/" \;
 
 cat > "$BUILD_DIR/dataset-metadata.json" <<EOF
 {
