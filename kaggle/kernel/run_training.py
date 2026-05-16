@@ -6,7 +6,7 @@ PROJECT_DATASET = Path("/kaggle/input/f1-kaggle-code")
 COMPETITION_DATASET = Path("/kaggle/input/playground-series-s6e5")
 WORKING_DIR = Path("/kaggle/working")
 
-sys.path.append(str(PROJECT_DATASET / "src"))
+sys.path.append(str(PROJECT_DATASET))
 
 from predict import generate_submission
 from train import train_models

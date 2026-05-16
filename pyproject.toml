@@ -12,3 +12,16 @@ dependencies = [
     "pyarrow>=16.0",
     "scikit-learn>=1.5",
 ]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+kaggle-deploy = "deploy:main"
+
+[tool.setuptools]
+py-modules = ["deploy"]
+
+[tool.setuptools.package-dir]
+"" = "src"

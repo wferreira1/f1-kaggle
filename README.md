@@ -30,12 +30,12 @@ f1-kaggle/
 │       └── submission.csv
 ├── models/
 ├── src/
-│   ├── download_data.sh
 │   ├── features.py
 │   ├── predict.py
 │   ├── train.py
 │   └── utils.py
-├── main.py
+├── scripts/
+│   └── download_data.sh
 ├── pyproject.toml
 └── README.md
 ```
@@ -68,7 +68,7 @@ O conjunto de treino contém as seguintes colunas:
 
 O pipeline atual está organizado da seguinte forma:
 
-1. **Download dos dados** com `src/download_data.sh`.
+1. **Download dos dados** com `scripts/download_data.sh`.
 2. **Engenharia de atributos** em `src/features.py`.
 3. **Treinamento e validação** em `src/train.py`.
 4. **Geração de previsões** em `src/predict.py`.
@@ -81,7 +81,7 @@ O pipeline atual está organizado da seguinte forma:
 Com a Kaggle API configurada na máquina, execute:
 
 ```bash
-bash src/download_data.sh
+bash scripts/download_data.sh
 ```
 
 O script baixa o pacote da competição e extrai os arquivos dentro de `data/in/`.
@@ -151,19 +151,33 @@ Instale o CLI e configure suas credenciais em `~/.kaggle/kaggle.json`.
 
 ### 2. Publicar o código como Dataset
 
+Com `uv`, o fluxo recomendado é usar o comando do projeto.
+
 Para criar o dataset pela primeira vez:
 
 ```bash
-bash scripts/deploy_kaggle_dataset.sh create SEU_USUARIO/f1-kaggle-code "F1 Kaggle Project Code"
+uv run kaggle-deploy --create
 ```
 
 Para publicar novas versões depois:
 
 ```bash
-bash scripts/deploy_kaggle_dataset.sh version SEU_USUARIO/f1-kaggle-code "F1 Kaggle Project Code" "Atualiza pipeline"
+uv run kaggle-deploy --message "Atualiza pipeline"
 ```
 
-O script empacota apenas os arquivos necessários do projeto (`src/`, `README.md`, `pyproject.toml`, `uv.lock` e `main.py`) e ignora dados locais, modelos e caches.
+Se quiser publicar o dataset **e já executar o kernel remoto** em seguida:
+
+```bash
+uv run kaggle-deploy --message "Atualiza pipeline" --push-kernel
+```
+
+Para testar apenas a montagem do pacote local, sem falar com o Kaggle:
+
+```bash
+uv run kaggle-deploy --build-only
+```
+
+O comando empacota apenas os arquivos necessários do projeto (`README.md`, `pyproject.toml`, `uv.lock` e os módulos de `src/`) e ignora dados locais, modelos e caches. Os módulos Python são publicados na raiz do dataset para evitar problemas com upload de pastas pelo Kaggle CLI.
 
 ### 3. Preparar o Kernel remoto
 
@@ -173,15 +187,21 @@ Copie o template:
 cp kaggle/kernel/kernel-metadata.json.example kaggle/kernel/kernel-metadata.json
 ```
 
-Depois, edite `kaggle/kernel/kernel-metadata.json` e substitua:
+O arquivo real `kaggle/kernel/kernel-metadata.json` já está configurado para:
 
-- `SEU_USUARIO/f1-pit-stop-training`
-- `SEU_USUARIO/f1-kaggle-code`
+- `wfoliveira/f1-pit-stop-training`
+- `wfoliveira/f1-kaggle-code`
 
 ### 4. Enviar e executar o Kernel no Kaggle
 
 ```bash
 bash scripts/push_kaggle_kernel.sh
+```
+
+Ou use o comando único:
+
+```bash
+uv run kaggle-deploy --message "Atualiza pipeline" --push-kernel
 ```
 
 O arquivo `kaggle/kernel/run_training.py` usa:
@@ -195,7 +215,7 @@ O arquivo `kaggle/kernel/run_training.py` usa:
 - comparar estratégias de validação mais próximas do cenário temporal da competição;
 - explorar novos modelos e tuning de hiperparâmetros;
 - registrar resultados de experimentos e versões de submissão;
-- decidir se `main.py` deve virar um ponto único de orquestração do pipeline.
+- consolidar configurações de treino e deploy conforme o projeto amadurecer.
 
 ## Competição
 

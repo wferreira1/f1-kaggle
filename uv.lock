@@ -237,7 +237,7 @@ wheels = [
 [[package]]
 name = "f1-kaggle"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "category-encoders" },
     { name = "interpret" },
