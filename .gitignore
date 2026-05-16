@@ -8,3 +8,13 @@ wheels/
 
 # Virtual environments
 .venv
+.uv-cache
+
+# Local artifacts
+.DS_Store
+data/in/
+data/out/
+models/
+
+# Kaggle packaging output
+.kaggle-build/

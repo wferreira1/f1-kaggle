@@ -1,7 +1,14 @@
 [project]
 name = "f1-kaggle"
 version = "0.1.0"
-description = "Add your description here"
+description = "Pipeline de modelagem para a competição Kaggle Predicting F1 Pit Stops"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "category-encoders>=2.6",
+    "interpret>=0.6",
+    "pandas>=2.2",
+    "polars>=1.0",
+    "pyarrow>=16.0",
+    "scikit-learn>=1.5",
+]
